@@ -1,0 +1,30 @@
+name: Daily Log Generator
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # JST 0:00 に実行（UTC 15:00）
+  workflow_dispatch:
+
+jobs:
+  generate-log:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate daily log
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          WEEKDAY=$(date -d "$DATE" +'%a')
+          FILE="logs/${DATE}.md"
+
+          # テンプレートから生成
+          sed "s/{{date}}/$DATE/g; s/{{weekday}}/$WEEKDAY/g" template.md > "$FILE"
+
+          git config --global user.name "Rikublender3d"
+          git config --global user.email "mikublender3d@gmail.com"
+
+          git add "$FILE"
+          git commit -m "add: daily log $DATE"
+          git push
