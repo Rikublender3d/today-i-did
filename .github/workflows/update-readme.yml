@@ -1,0 +1,20 @@
+name: Update README Weekly
+
+on:
+  schedule:
+    - cron: '0 15 * * SUN' # 毎週日曜23:00 JST
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/update_readme.py
+      - run: |
+          git config --global user.name "Rikublender3d"
+          git config --global user.email "mikublender3d@gmail.com"
+          git add README.md
+          git commit -m "update: weekly summary"
+          git push
+
