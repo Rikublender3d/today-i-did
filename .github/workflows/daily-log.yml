@@ -5,6 +5,9 @@ on:
     - cron: '0 15 * * *'  # JST 0:00 に実行（UTC 15:00）
   workflow_dispatch:
 
+permissions:
+  contents: write  # ← この行を追加
+
 jobs:
   generate-log:
     runs-on: ubuntu-latest
